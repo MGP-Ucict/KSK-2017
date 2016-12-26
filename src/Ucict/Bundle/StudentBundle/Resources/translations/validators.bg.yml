@@ -1,0 +1,7 @@
+# validators.bg.yml
+register.email.not_blank: Моля, въведете email.
+register.password.not_blank: Моля, въведете парола.
+register.firstname.not_blank: Моля, въведете име.
+register.middlename.not_blank: Моля, въведете презиме.
+register.lastname.not_blank: Моля, въведете фамилия.
+register.personalnumber.not_blank: Моля, въведете ЕГН.

@@ -19,21 +19,21 @@ class RegisterType extends AbstractType
 					'class'=>'all'
 				),
 				'label'    => 'Име',
-				'required' => true,
+				'required' => false,
 			))
             ->add('middlename', TextType::class, array(
 				'attr'=>array(
 					'class'=>'all'
 				),
 				'label'    => 'Презиме',
-				'required' => true,
+				'required' => false,
 			))
 			->add('lastname', TextType::class, array(
 				'attr'=>array(
 					'class'=>'all'
 				),
 				'label'    => 'Фамилия',
-				'required' => true,
+				'required' => false,
 			))
 			->add('othername', TextType::class, array(
 				'attr'=>array(
@@ -47,27 +47,33 @@ class RegisterType extends AbstractType
 					'class'=>'all'
 				),
 				'label'    => 'ЕГН',
-				'required' => true,
+				'required' => false,
 			))
 			->add('email', RepeatedType::class, array(
 				'type'           => EmailType::class,
-				'first_options'  => array('label' => 'E-mail адрес'),
-				'second_options' => array('label' =>'Повторете e-mail адреса'),
+				'invalid_message' => 'Въведените e-mail адреси не са еднакви.',
+				 'required'        => false,
+				'error_bubbling'  => false,
+				'first_options'  => array('label' => 'E-mail адрес', 'error_bubbling' => true),
+				'second_options' => array('label' =>'Повторете e-mail адреса', 'error_bubbling' => false),
 				'attr'           =>array(
 				
 					'class'      =>'all'
 				),
-				'required'       => true,
+				'required'       => false,
 			))
 			->add('password', RepeatedType::class, array(
 				'type'           => PasswordType::class,
-				'first_options'  => array('label' => 'Парола'),
-				'second_options' => array('label' =>'Повторете паролата'),
+				'invalid_message' => 'Въведените пароли не са еднакви.',
+				'required'        => false,
+				'error_bubbling'  => false,
+				'first_options'  => array('label' => 'Парола', 'error_bubbling' => true),
+				'second_options' => array('label' =>'Повторете паролата', 'error_bubbling' => false),
 				'attr'           => array(
 				
 					'class'      =>'all'
 				),
-				'required'       => true,
+				'required'       => false,
 			))
             ->add('save', SubmitType::class, array(
 				'label'         =>  'Регистрация',

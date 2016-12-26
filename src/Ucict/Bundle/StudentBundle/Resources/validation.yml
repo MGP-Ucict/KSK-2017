@@ -1,0 +1,15 @@
+# src/AppBundle/Resources/config/validation.yml
+Ucict\Bundle\StudentBundle\Form\Model\Register:
+    properties:
+        email:
+            - NotBlank: { message: 'Моля, въведете email' }
+        password:
+            - NotBlank: { message: 'Моля, въведете парола' }
+        firstname:
+            - NotBlank: { message: 'Моля, въведете име' }
+        middlename:
+            - NotBlank: { message: 'Моля, въведете презиме' }
+        lastname:
+            - NotBlank: { message: 'Моля, въведете фамилия' }
+        personalnumber:
+            - NotBlank: { message: 'Моля, въведете ЕГН' }
