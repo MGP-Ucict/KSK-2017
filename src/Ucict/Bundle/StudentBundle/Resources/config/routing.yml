@@ -1,0 +1,7 @@
+student_homepage:
+    path:     /
+    defaults: { _controller: StudentBundle:Default:index }
+register:
+    path:     /register
+    defaults: { _controller: StudentBundle:User:register }
+
