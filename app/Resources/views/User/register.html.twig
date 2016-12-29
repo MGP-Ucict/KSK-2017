@@ -1,1 +1,44 @@
-{{form(form)}}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+{{ form_label(form.firstname) }}
+{{ form_widget(form.firstname) }}
+<div class="error">
+{{ form_errors(form.firstname) }}
+</div>
+
+{{ form_label(form.middlename) }}
+{{ form_widget(form.middlename) }}
+<div class="error">
+{{ form_errors(form.middlename) }}
+</div>
+
+{{ form_label(form.lastname) }}
+{{ form_widget(form.lastname) }}
+<div class="error">
+{{ form_errors(form.lastname) }}
+</div>
+
+{{ form_label(form.othername) }}
+{{ form_widget(form.othername) }}
+<div class="error">
+{{ form_errors(form.othername) }}
+</div>
+
+{{ form_label(form.personalnumber) }}
+{{ form_widget(form.personalnumber) }}
+<div class="error">
+{{ form_errors(form.personalnumber) }}
+</div>
+
+
+{{ form_widget(form.email) }}
+<div class="error">
+{{ form_errors(form.email) }}
+</div>
+
+
+{{ form_widget(form.password) }}
+<div class="error">
+{{ form_errors(form.password) }}
+</div>
+{{form_end(form)}}
