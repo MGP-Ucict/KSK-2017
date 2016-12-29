@@ -26,7 +26,7 @@ public function registerAction(Request $request){
  $form->handleRequest( $request );
  if( $form->isSubmitted()  && $form->isValid()){
 	$em             = $this->getDoctrine()->getManager();
-	$firstname      = $form->get('fistname')->getData();
+	$firstname      = $form->get('firstname')->getData();
 	$middlename     = $form->get('middlename')->getData();
 	$lastname       = $form->get('lastname')->getData();
 	$othername      = $form->get('othername')->getData();
@@ -34,10 +34,10 @@ public function registerAction(Request $request){
 	$email          = $form->get('email')->getData();
 	$password       = $form->get('password')->getData();
 	
-	$user_object    = $this->getDoctine()->getRepository('/Ucict/Bundle/StudentBundle:User')->findOnByEmail($mail);
-	if( $user_object ){
+	//$user_object    = $this->getDoctrine()->getRepository('StudentBundle:User')->findOnByEmail($mail);
+	//if( $user_object ){
 		//throw Exception
-	}
+//	}
 	
 	$user            = new User();
 	//encode the password
@@ -60,14 +60,12 @@ public function registerAction(Request $request){
 	$student->setLastName($lastname);
 	$student->setOtherName($othername);
 	$student->setPersonalNumber($personalnumber);
+	$student->setPersonalNumberType(1);
+	$student->setProfileId(0);
 	$student->setUserId($userid);
 	$em->persist($student);
 	$em->flush();
 	
-	$studentid = $student->getId();
-	$user->setStudentId($studentid);
-	$em->persist($user);
-	$em->flush();
 	
 	$this->get('session')->getFlashBag('notice', 'Вие се регистрирахте успешно в системата');
  }

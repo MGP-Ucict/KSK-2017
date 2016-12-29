@@ -1,0 +1,29 @@
+Ucict\Bundle\StudentBundle\Entity\Student:
+    type: entity
+    table: student
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        profile_id:
+            type: integer
+        user_id:
+            type: integer
+        personal_number_type:
+            type: integer
+        first_name:
+            type: string
+            length: 255
+        middle_name:
+            type: string
+            length: 255
+        last_name:
+            type: string
+            length: 255
+        other_name:
+            type: string
+            length: 255		
+        personal_number:
+            type: string
+            length: 10

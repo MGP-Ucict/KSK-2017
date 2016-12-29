@@ -6,26 +6,33 @@ use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * StudentUser
+ * @ORM\Entity
+ * @ORM\Table(name="student_user")
  */
 class User implements UserInterface, Serializable {
 
 	/**
-	 * @var integer
-	 */
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
 	private $id;
 
 	/**
-	 * @var string
-	 */
+     * @ORM\Column(type="string", length=255)
+     */
 	private $email;
 
 	/**
-	 * @var string
-	 */
+     * @ORM\Column(type="string", length=1000)
+     */
 	private $password;
 	private $studentid;
-	private $activated = false;
+	/**
+     * @ORM\Column(type="integer", length=1)
+	 * @ORM\is_activated
+     */
+	private $is_activated = false;
 
 	/**
 	 * @return integer 
@@ -108,11 +115,11 @@ class User implements UserInterface, Serializable {
 	}
 	
 	public function isActivated() {
-		return $this->activated;
+		return $this->is_activated;
 	}
 
 	public function setActivated($activated) {
-		$this->activated = (boolean)$activated;
+		$this->is_activated = (boolean)$activated;
 		return $this;
 	}
 
