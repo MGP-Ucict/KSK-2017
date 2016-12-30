@@ -4,4 +4,8 @@ student_homepage:
 register:
     path:     /register
     defaults: { _controller: StudentBundle:User:register }
+login:
+    path:     /login
+    defaults: { _controller: StudentBundle:User:login }
+
 

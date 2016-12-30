@@ -1,6 +1,6 @@
 <?php
 namespace Ucict\Bundle\StudentBundle\Form\Model;
-
+use Captcha\Bundle\CaptchaBundle\Validator\Constraints as CaptchaAssert;
 use Symfony\Component\Validator\Constraints as Assert;
  use Symfony\Component\Validator\Constraints\Regex; 
 class Register{
@@ -42,6 +42,22 @@ protected $othername;
  */
 protected $personalnumber;
 
+/**
+ * @CaptchaAssert\ValidCaptcha(
+ *      message = "Моля, въведете кода правилно."
+ * )
+ */
+  protected $captchaCode;
+
+  public function getCaptchaCode()
+  {
+    return $this->captchaCode;
+  }
+
+  public function setCaptchaCode($captchaCode)
+  {
+    $this->captchaCode = $captchaCode;
+  }
 public function setEmail($email){
 
 $this->email = $email;

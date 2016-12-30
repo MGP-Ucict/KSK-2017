@@ -75,9 +75,13 @@ class RegisterType extends AbstractType
 				),
 				'required'       => false,
 			))
-            ->add('save', SubmitType::class, array(
-				'label'         =>  'Регистрация',
+           
+			->add('captchaCode', 'Captcha\Bundle\CaptchaBundle\Form\Type\CaptchaType', array(
+  'captchaConfig' => 'ExampleCaptcha'
 			))
-        ;
+			 ->add('save', SubmitType::class, array(
+				'label'         =>  'Регистрация',
+			));
+        
     }
 }
