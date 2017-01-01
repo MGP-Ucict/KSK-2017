@@ -19,21 +19,21 @@ class RegisterType extends AbstractType
 					'class'=>'all'
 				),
 				'label'    => 'Име',
-				'required' => false,
+				'required' => true,
 			))
             ->add('middlename', TextType::class, array(
 				'attr'=>array(
 					'class'=>'all'
 				),
 				'label'    => 'Презиме',
-				'required' => false,
+				'required' => true,
 			))
 			->add('lastname', TextType::class, array(
 				'attr'=>array(
 					'class'=>'all'
 				),
 				'label'    => 'Фамилия',
-				'required' => false,
+				'required' => true,
 			))
 			->add('othername', TextType::class, array(
 				'attr'=>array(
@@ -47,37 +47,43 @@ class RegisterType extends AbstractType
 					'class'=>'all'
 				),
 				'label'    => 'ЕГН',
-				'required' => false,
+				'required' => true,
 			))
 			->add('email', RepeatedType::class, array(
 				'type'           => EmailType::class,
 				'invalid_message' => 'Въведените e-mail адреси не са еднакви.',
-				 'required'        => false,
-				'error_bubbling'  => false,
-				'first_options'  => array('label' => 'E-mail адрес', 'error_bubbling' => true),
-				'second_options' => array('label' =>'Повторете e-mail адреса', 'error_bubbling' => false),
+				 'required'        => true,
+				//'error_bubbling'  => false,
+				'first_options'  => array('label' => 'E-mail адрес'//, 'error_bubbling' => true
+				),
+				'second_options' => array('label' =>'Повторете e-mail адреса'
+				//, 'error_bubbling' => false
+				),
 				'attr'           =>array(
 				
 					'class'      =>'all'
 				),
-				'required'       => false,
+				'required'       => true,
 			))
 			->add('password', RepeatedType::class, array(
 				'type'           => PasswordType::class,
 				'invalid_message' => 'Въведените пароли не са еднакви.',
 				'required'        => false,
-				'error_bubbling'  => false,
-				'first_options'  => array('label' => 'Парола', 'error_bubbling' => true),
-				'second_options' => array('label' =>'Повторете паролата', 'error_bubbling' => false),
+				//'error_bubbling'  => false,
+				'first_options'  => array('label' => 'Парола'//, //'error_bubbling' => true
+				),
+				'second_options' => array('label' =>'Повторете паролата'//, //'error_bubbling' => false
+				),
 				'attr'           => array(
 				
 					'class'      =>'all'
 				),
-				'required'       => false,
+				'required'       => true,
 			))
            
 			->add('captchaCode', 'Captcha\Bundle\CaptchaBundle\Form\Type\CaptchaType', array(
-  'captchaConfig' => 'ExampleCaptcha'
+  'captchaConfig' => 'ExampleCaptcha',
+  'label' => 'Въведете кода за валидация'
 			))
 			 ->add('save', SubmitType::class, array(
 				'label'         =>  'Регистрация',

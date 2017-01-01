@@ -2,6 +2,10 @@
 
 namespace Ucict\Bundle\StudentBundle\Controller;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Ucict\Bundle\StudentBundle\Form\RegisterType;
 use Ucict\Bundle\StudentBundle\Entity\User;
 use Ucict\Bundle\StudentBundle\Entity\Student;
@@ -12,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Ucict\Bundle\StudentBundle\Form\Model\Register;
+use Ucict\Bundle\StudentBundle\Form\Model\Reset;
 
 
 class UserController extends Controller{
@@ -87,5 +92,80 @@ public function registerAction(Request $request){
         'error'         => $error,
     ));
 }
+
+	/**
+	 * @Route( "/reset", name= "reset")
+	 */
+	 public function resetAction( Request $request){
+	 /*if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+	 	return $this->redirect($this->generateUrl('login'));
+    }
+*/
+	 $reset = new Reset();
+	 $form = $this->createFormBuilder($reset)
+				->add('oldpassword', PasswordType::class, array(
+				'attr'=>array(
+					'class'=>'all'
+				),
+				'label'    => 'Стара парола',
+				))
+				->add('newpassword', RepeatedType::class, array(
+				'type'=> PasswordType::class,
+				'invalid_message' => 'Въведените пароли не са еднакви.',
+				'first_options'  => array('label' =>'Нова парола'),
+				'second_options' => array('label' =>'Повторете новата парола'),
+				))
+				->add('submit', SubmitType::class, array(
+				'attr'=>array(
+					'class'=>'all'
+				),
+				'label'    => 'Запазване',
+				))
+				->getForm();
+	$form->handleRequest($request);
+	if($form->isSubmitted() && $form->isValid()){
+	$session = $request->getSession();
+	
+	//var_dump($username);
+	$em = $this->getDoctrine()->getManager();
+	$user  = $this->getUser();
+//$em->getRepository('AppBundle:User')->findOneByUsername($username);
+	$currentPassword = $user->getPassword();
+	$oldPassword = $form->get('oldpassword')->getData();
+	$newpassword =  $form->get('newpassword')->getData();
+	$factory = $this->get('security.encoder_factory');
+	$encoder = $factory->getEncoder($user);
+	
+	
+	$validPassword = $encoder->isPasswordValid(
+		$currentPassword,
+		$oldPassword,
+		$user->getSalt()
+		);
+	if($validPassword){
+	
+		$encodedPassword = $encoder->encodePassword($newpassword, $user->getSalt());
+
+		$user->setPassword($encodedPassword);
+		$em->persist($user);
+		$em->flush();
+		$this->get('session')->getFlashBag()->add(
+        'notice1',
+		'Успешно сменихте паролата си!'
+        
+    );
+	}
+	else{
+	$this->get('session')->getFlashBag()->add(
+        'notice2',
+		'Невалидна стара парола!'
+    );
+	}
+	
+	}
+	return $this->render('User/reset.html.twig', array(
+	'form'=>$form->createView(),
+	));		
+	 }
 }
 

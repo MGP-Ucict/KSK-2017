@@ -7,5 +7,9 @@ register:
 login:
     path:     /login
     defaults: { _controller: StudentBundle:User:login }
+reset:
+    path:     /reset
+    defaults: { _controller: StudentBundle:User:reset }
+
 
 

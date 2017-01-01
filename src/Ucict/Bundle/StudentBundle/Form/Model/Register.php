@@ -38,7 +38,7 @@ protected $othername;
  *     match=true, message = "Моля, въведете ЕГН от цифри")
  * @Assert\Length(
  *      min = 10, max = 10,
- *      exactMessage = "ЕГН се състои от {{ 10 }} цифри")
+ *      exactMessage = "ЕГН се състои от  10  цифри")
  */
 protected $personalnumber;
 
