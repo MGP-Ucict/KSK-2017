@@ -5,9 +5,82 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+		  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+	<style type="text/css">
+    .container{
+    padding-top: 0px;
+    background-color: white;
+    text-align: right;
+	
+    }
+    .content{
+    
+    margin: 0 auto;
+    background-color: white;
+    text-align: left;
+	
+    }
+    *{
+    padding:0;
+    margin: 0;
+    }
+    .required:after {
+    content: "*";
+    color: red;
+	}
+
+
+	textarea{
+		padding:0px;
+
+	}
+	input{
+		padding-left: 10px;
+
+	}
+	 .control-label{
+	padding-top: 10px;
+	}
+	.off{
+	margin-top: 10px;
+
+	}
+	.off1{
+	margin-top: 20px;
+	}
+    
+	.mini{
+	width: 145px;
+	height: 30px;
+
+	   
+	}
+	.error{
+	color:red;
+	}
+	</style>
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+		<div class="container col-md-12">
+		<div class="content col-md-offset-10">
+			{% block content %}{% endblock %}
+		</div>
+		</div>
+
+		{% endblock %}
+        {% block javascripts %}
+
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		{% endblock %}
     </body>
 </html>

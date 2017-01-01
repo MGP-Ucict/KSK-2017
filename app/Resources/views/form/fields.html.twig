@@ -1,0 +1,105 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+            <div class="control-group {% if errors|length > 0 %}error{% elseif value %}success{% endif %}"> 
+        {{ form_label(form, label|default(null), { 'label_attr' : { 'class' : 'col-sm-4 control-label' } }) }}
+		<div class="col-sm-8"> 
+            {{ form_widget(form) }}
+            
+			<div class='error'>{{ form_errors(form) }}</div>
+        </div>
+		</div>
+		<div class="clearfix">&nbsp;</div>
+		</div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+
+
+
+{%- block button_widget -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+	<div class="form-group">        
+      <div class="col-sm-offset-4 col-sm-4">
+
+    <button  class= "btn btn-primary" type="{{ type|default('button') }}" {{ block( 'button_attributes') }}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</button>
+	</div>
+	</div>
+{%- endblock button_widget -%}
+
+{%- block textarea_widget -%}
+    <textarea class="col-sm-5 form-control" {{ block('widget_attributes') }}>{{ value }}</textarea>
+	
+		
+{%- endblock textarea_widget -%}
+
+{%- block choice_widget -%}
+    <select placeholder="Choose Option" class="col-sm-5 form-control" {{ block('widget_attributes') }}>{{ block('choice_widget_options') }}</select>
+	
+		
+{%- endblock choice_widget -%}
+
+{% block choice_widget_options %}
+{% spaceless %}
+
+
+    {% for group_label, choice in choices %}
+        {% if choice is iterable %}
+		
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{ block('choice_widget_options') }}
+            </optgroup>
+        {% else  %}
+            <option value="{{choice.value }}"{% if choice is selectedchoice(value) %} 
+			selected="selected"
+	
+			
+			
+			
+			{% endif %}>
+             <img src="images/down-arrow.png" />
+
+              {{ choice.label|trans({}, translation_domain) }}
+        </option>
+    {% endif %}
+{% endfor %}
+{% endspaceless %}
+{% endblock choice_widget_options %}
+{% block file_widget %}
+    {% spaceless %}
+   <input id="uploadFile" placeholder="Choose File" disabled="disabled" class="col-sm-6 form-control" />
+<div class="fileUpload btn btn-warning">
+    <span>Upload</span>
+    {% set type = type|default('file') %}
+         <input id="uploadBtn" class="upload col-sm-2 form-control" type="{{ type }}" {{ block('widget_attributes')  }} />
+    
+</div>
+    {% endspaceless %}
+{% endblock file_widget %}
+
+{% block form_widget_simple %}
+    {% set type = type|default('text') %}
+    
+    <input class="form-control" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    
+{% endblock form_widget_simple %}
+
+
+{% block integer_widget %}
+{% spaceless %}
+    
+        {% set type = type|default('number') %}
+        {{ block('form_widget_simple') }}
+   
+    {% endspaceless %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'form/fields.html.twig' %}
+
+{% block content %}
+<h1>Смяна на паролата</h1>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{form_end(form)}}
+{% endblock %}

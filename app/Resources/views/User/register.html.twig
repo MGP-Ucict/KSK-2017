@@ -1,5 +1,10 @@
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
+{% extends 'base.html.twig' %}
+{% form_theme form 'form/fields.html.twig' %}
+{% block content %}
+<h1>Регистрация на кандидат-студент в системата</h1>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{#
 {{ form_label(form.firstname) }}
 {{ form_widget(form.firstname) }}
 <div class="error">
@@ -41,4 +46,7 @@
 <div class="error">
 {{ form_errors(form.password) }}
 </div>
+#}
 {{form_end(form)}}
+
+{% endblock %}
