@@ -10,6 +10,16 @@ login:
 reset:
     path:     /reset
     defaults: { _controller: StudentBundle:User:reset }
+profile:
+    path:     /profile
+    defaults: { _controller: StudentBundle:User:profile }
+confirm_registration:
+    path: /confirm_registration
+    defaults: { _controller: StudentBundle:User:confirm_registration}
+index:
+    path: /index
+    defaults: { _controller: StudentBundle:User:index}
+
 
 
 

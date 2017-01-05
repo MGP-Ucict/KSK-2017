@@ -1,0 +1,38 @@
+Ucict\Bundle\StudentBundle\Entity\Profile:
+    type: entity
+    table: student_profile
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        birth_date: 
+            type: date 
+        phone:
+            length: 32
+            nullable: true
+            type: string
+        second_phone:
+            length: 32
+            nullable: true
+            type: string
+        gsm:
+            length: 32
+            type: string
+        second_gsm:
+            length: 32
+            type: string
+            nullable: true
+        graduate_year:
+            type: integer
+             
+        gender_id:
+            type: integer
+
+        contact_address_id: 
+            type: integer
+        
+        # oneToOne:
+        #   profile:
+        #     targetEntity: Student
+        #     mappedBy: student_profile       

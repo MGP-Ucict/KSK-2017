@@ -3,6 +3,7 @@ namespace Ucict\Bundle\StudentBundle\Form\Model;
 use Captcha\Bundle\CaptchaBundle\Validator\Constraints as CaptchaAssert;
 use Symfony\Component\Validator\Constraints as Assert;
  use Symfony\Component\Validator\Constraints\Regex; 
+ use Ucict\Bundle\StudentBundle\Validator\Constraints as AcmeAssert;
 class Register{
 /**
  * @Assert\NotBlank(message = "Моля, въведете e-mail")
@@ -11,6 +12,13 @@ class Register{
 protected $email;
 /**
  * @Assert\NotBlank(message = "Моля, въведете парола")
+ * @Assert\Length(
+ *      min = 6, max = 20,
+ *      minMessage = "Паролата се състои от  най-малко от 6 символа",
+ *      maxMessage = "Паролата се състои от  най-много от 20  символа"
+ * )
+ * @Assert\Regex(pattern     = "/[A-Za-z0-9_]/", message = "Моля, въведете паролата с латински букви, цифри или _"
+ * )
  */
 protected $password;
 /**
@@ -39,6 +47,7 @@ protected $othername;
  * @Assert\Length(
  *      min = 10, max = 10,
  *      exactMessage = "ЕГН се състои от  10  цифри")
+ * @AcmeAssert\egn
  */
 protected $personalnumber;
 

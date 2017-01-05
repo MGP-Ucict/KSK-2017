@@ -1,6 +1,7 @@
 <?php
 
 namespace Ucict\Bundle\StudentBundle\Entity;
+use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="student")
@@ -41,8 +42,12 @@ class Student {
      * @ORM\Column(type="integer")
      */
 	private $personal_number_type;
+	
+	
+
 	/**
-     * @ORM\Column(type="integer")
+     * @ORM\OneToOne(targetEntity="Profile", inversedBy="student")
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
      */
 	private $profile_id;
 

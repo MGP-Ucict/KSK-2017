@@ -7,8 +7,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Ucict\Bundle\StudentBundle\Form\RegisterType;
+use Ucict\Bundle\StudentBundle\Form\ProfileType;
 use Ucict\Bundle\StudentBundle\Entity\User;
 use Ucict\Bundle\StudentBundle\Entity\Student;
+use Ucict\Bundle\StudentBundle\Entity\Profile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Ucict\Bundle\StudentBundle\Form\Model\Register;
 use Ucict\Bundle\StudentBundle\Form\Model\Reset;
+use Symfony\Component\HttpFoundation\Session\Session;
+
+$session = new Session();
+//$session->start();
 
 
 class UserController extends Controller{
@@ -25,7 +31,8 @@ class UserController extends Controller{
  * @Route("/register", name = "register")
  */
 public function registerAction(Request $request){
-
+ $session = new Session();
+ //$session->start();
  $register = new Register();
  $form 	   = $this->createForm( RegisterType::class, $register );
  $form->handleRequest( $request );
@@ -39,10 +46,11 @@ public function registerAction(Request $request){
 	$email          = $form->get('email')->getData();
 	$password       = $form->get('password')->getData();
 	
-	//$user_object    = $this->getDoctrine()->getRepository('StudentBundle:User')->findOnByEmail($mail);
-	//if( $user_object ){
-		//throw Exception
-//	}
+	$user_object    = $this->getDoctrine()->getRepository('StudentBundle:User')->findOneByEmail($email);
+	if( $user_object ){
+		$session->getFlashBag()->add('notice2', 'Този e-mail вече е регистриран в системата');
+		return $this->render('User/register.html.twig', array('form'=>$form->createView()));
+	}
 	
 	$user            = new User();
 	//encode the password
@@ -65,14 +73,28 @@ public function registerAction(Request $request){
 	$student->setLastName($lastname);
 	$student->setOtherName($othername);
 	$student->setPersonalNumber($personalnumber);
-	$student->setPersonalNumberType(1);
+	$student->setPersonalNumberType(0);
 	$student->setProfileId(0);
 	$student->setUserId($userid);
 	$em->persist($student);
 	$em->flush();
 	
+	$name = $firstname . " ". $lastname;
+	$message = \Swift_Message::newInstance()
+        ->setSubject('КСК 2017  Регистрация на кандидат-студент в СУ "Св. Климент Охридски" ')
+        ->setFrom('mpenelova@ucc.uni-sofia.bg')
+        ->setTo($email)
+        ->setBody(
+            $this->renderView(
+                'User/index.html.twig',
+                array('name' => $name, 'email'=> $email)
+            ),
+            'text/html'
+        );
+    $this->get('mailer')->send($message);
+    $session->set('email', $email);
 	
-	$this->get('session')->getFlashBag('notice', 'Вие се регистрирахте успешно в системата');
+	$session->getFlashBag()->add('notice', 'Вие се регистрирахте успешно в системата');
  }
  return $this->render('User/register.html.twig', array('form'=>$form->createView()));
  
@@ -155,17 +177,110 @@ public function registerAction(Request $request){
         
     );
 	}
-	else{
-	$this->get('session')->getFlashBag()->add(
-        'notice2',
-		'Невалидна стара парола!'
-    );
-	}
+	
 	
 	}
 	return $this->render('User/reset.html.twig', array(
 	'form'=>$form->createView(),
 	));		
 	 }
+
+/**
+ * @Route("/confirm_registration", name = "confirm_registration")
+ */
+public function confirm_registrationAction(Request $request){
+$email = $request->query->get('email');
+
+
+$user   = $this->getDoctrine()->getRepository('StudentBundle:User')->findBy(array('email'=>$email));
+$user->setActivated(1);
+$em = $this->getDoctrine()->getManager();
+$em->persist($user);
+$em->flush();
+
+return $this->render('User/confirm_registration.html.twig', array( ));
+ 
+
+}
+
+/**
+ * @Route("/profile", name = "profile")
+ */
+ public function profileAction(Request $request){
+
+ $profile  = new Profile();
+
+ $form 	   = $this->createForm( ProfileType::class, $profile );
+$form->handleRequest( $request );
+ if( $form->isSubmitted()  && $form->isValid()){
+	$em             = $this->getDoctrine()->getManager();
+	$firstname      = $form->get('firstname')->getData();
+	$middlename     = $form->get('middlename')->getData();
+	$lastname       = $form->get('lastname')->getData();
+	$othername      = $form->get('othername')->getData();
+	$personalnumber = $form->get('personalnumber')->getData();
+	$birthdate      = $form->get('birthdate')->getData();
+	$graduateyear   = $form->get('graduateyear')->getData();
+
+	//$user_object    = $this->getDoctrine()->getRepository('StudentBundle:User')->findOnByEmail($mail);
+	//if( $user_object ){
+		//throw Exception
+//	}
+	
+	//$profile         = new Profile();
+	
+	$student         = new Student();
+	
+	
+	
+	
+	$student->setFirstName($firstname);
+	$student->setMiddleName($middlename);
+	$student->setLastName($lastname);
+	$student->setOtherName($othername);
+	$student->setPersonalNumber($personalnumber);
+	$student->setPersonalNumberType(0);
+	$student->setProfileId(0);
+	//$student->setUserId($userid);
+	$em->persist($student);
+	$em->flush();
+	
+	
+	$this->get('session')->getFlashBag('notice', 'Вие се регистрирахте успешно в системата');
+ }
+//  else
+// { die('not valid'); }
+ return $this->render('User/profile.html.twig', array('form'=>$form->createView()));
+ 
+ }
+//  public function indexAction($name = "")
+// {
+//     $message = \Swift_Message::newInstance()
+//         ->setSubject('Hello Email')
+//         ->setFrom('mpenelova@ucc.uni-sofia.bg')
+//         ->setTo('mpenelova@ucc.uni-sofia.bg')
+//         ->setBody(
+//             $this->renderView(
+//                 // app/Resources/views/Emails/registration.html.twig
+//                 'User/index.html.twig',
+//                 array('name' => $name)
+//             ),
+//             'text/html'
+//         )
+//         /*
+//          * If you also want to include a plaintext version of the message
+//         ->addPart(
+//             $this->renderView(
+//                 'Emails/registration.txt.twig',
+//                 array('name' => $name)
+//             ),
+//             'text/plain'
+//         )
+//         */
+//     ;
+//     $this->get('mailer')->send($message);
+
+//     return $this->render('User/index.html.twig');
+// }
 }
 
