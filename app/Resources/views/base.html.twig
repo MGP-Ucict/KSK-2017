@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Кандидатстудентска кампания 2017{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 		  <!-- Latest compiled and minified CSS -->
@@ -33,12 +33,20 @@
     padding:0;
     margin: 0;
     }
+	.right{
+	text-align: right;
+	}
     .required:after {
     content: "*";
     color: red;
 	}
-
-
+	h1{
+	margin-left: 20px;
+	}
+	.offsetlogin{
+	margin-left: 50px;
+	
+	}
 	textarea{
 		padding:0px;
 
@@ -66,6 +74,11 @@
 	}
 	.error{
 	color:red;
+	}
+	 select{
+		width: 90px;
+
+		
 	}
 	</style>
     </head>

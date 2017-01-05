@@ -4,20 +4,21 @@
 
 {% block content %}
 
+
+<h1>Вход в системата</h1>
 {% if error %}
 	
-    
+    <div class="offsetlogin error">
 	{{ error.message | replace({"Invalid credentials." : "Невалидно потребителско име или парола."}) }}
 	{{ error.message | replace({"Bad credentials." : "Сгрешено потребителско име или парола."}) }}
-	
+	</div>
 {% endif %}
-<h1>Вход в системата</h1>
 <form action="{{ path('login') }}" method="post" class="form-horizontal">
 <div class="form-group">
             
 		 
     <label class="col-sm-2 control-label" for="username">E-mail адрес</label>
-	<div class="col-sm-10">
+	<div class="col-sm-4">
     <input type="text" id="username" name="_username" value="{{ last_username }}"  class="form-control"/>
 	</div>
 	</div>
@@ -27,7 +28,7 @@
         
 		 
     <label class="col-sm-2 control-label" for="password">Парола</label>
-	<div class="col-sm-10">
+	<div class="col-sm-4">
     <input type="password" id="password" name="_password"  class="form-control"/>
 	</div>
 	</div>

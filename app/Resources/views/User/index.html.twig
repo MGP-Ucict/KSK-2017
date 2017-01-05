@@ -1,0 +1,20 @@
+{# app/Resources/views/Emails/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+
+
+{% block content %}
+ <p>Здравейте {{ name }},</p>
+{{email}}
+ <p>Този e-mail се изпраща от системата за онлайн кандидатстване на Софийски университет "Св. Климент Охридски".</p>
+ <p>Вашата заявка за регистрация е приета.</p>
+ <p>За да активирате профила си, моля, последвайте следната връзка:<p>
+
+{# example, assuming you have a route named "login" #}
+ {#<p><a  class = "btn btn-primary" href="{{ url('confirm_registration') }}">натиснете тук</a>.</p>#}
+{#<p>	<a href="{{ path('confirm_registration', {'email': email}) }}">натиснете тук</a>.</p>#}
+
+<p>Ако не сте изпращали заявка в системата, не отваряйте горния линк и игнорирайте този e-mail.</p>
+<a  class = "btn btn-primary" href="{{ url('confirm_registration', { 'email': email }) }}">натиснете тук</a>
+{% endblock %}
+
