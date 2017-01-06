@@ -6,30 +6,30 @@ Ucict\Bundle\StudentBundle\Entity\Profile:
             type: integer
             generator: { strategy: AUTO }
     fields:
-        birth_date: 
+        birthDate: 
             type: date 
         phone:
             length: 32
             nullable: true
             type: string
-        second_phone:
+        secondPhone:
             length: 32
             nullable: true
             type: string
         gsm:
             length: 32
             type: string
-        second_gsm:
+        secondGsm:
             length: 32
             type: string
             nullable: true
-        graduate_year:
+        graduateYear:
             type: integer
              
-        gender_id:
+        genderId:
             type: integer
 
-        contact_address_id: 
+        contactAddressId: 
             type: integer
         
         # oneToOne:

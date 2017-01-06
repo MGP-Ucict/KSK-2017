@@ -24,49 +24,75 @@ class Profile {
     private $studentid;
     /**
      * @Assert\LessThan("today")
+     * @ORM\Column(name = "birthDate", type="date")
      */
-    private $birthdate;
+    private $birthDate;
 
-    private $genderid;
+    /**
+     * @ORM\Column(name = "genderId", type="integer")
+     */
+    private $genderId;
     /**
      * @Assert\NotBlank(message = "Моля, въведете година на завършване")
      * @Assert\LessThan(2018)(message = "Годината на завършване е по-малка от 2018")
+     * @ORM\Column(name = "graduateYear", type="integer")
      */
-    private $graduateyear;
+     
+    private $graduateYear;
     //private $nationality;
+    /**
+     * @ORM\Column(name = "phone", type="string", length=32)
+     */
     private $phone;
-    private $secondphone;
+    /**
+     * @ORM\Column(name = "secondPhone", type="string", length=32)
+     */
+    private $secondPhone;
+    /**
+     * @ORM\Column(name = "gsm", type="string", length=32)
+     */
     private $gsm;
-    private $secondgsm;
+    /**
+     * @ORM\Column(name = "secondGsm", type="string", length=32)
+     */
+    private $secondGsm;
     //private $second_email;
-    private $contactaddressid;
+    /**
+     * @ORM\Column(name = "contactAddressId", type="integer")
+     */
+    private $contactAddressId;
 
     // function __construct(Student $student) {
     //     $this->student = $student;
     // }
     
-    private $userid;
+    private $userId;
     /**
      *
+     * @ORM\Column(name = "firstName", type="string", length=255)
     * @Assert\NotBlank(message = "Моля, въведете име")
     * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете името на кирилица")
     */
-    private $firstname;
+    private $firstName;
     /**
+     * @ORM\Column(name = "middleName", type="string", length=255)
      * @Assert\NotBlank(message = "Моля, въведете презиме")
      * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете презимето на кирилица")
      */
-    private $middlename;
+    private $middleName;
     /**
+     * @ORM\Column(name = "lastName", type="string", length=255)
      * @Assert\NotBlank(message = "Моля, въведете фамилия")
      * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете фамилията на кирилица")
      */
-    private $lastname;
+    private $lastName;
     /**
+     * @ORM\Column(name = "otherName", type="string", length=255)
      * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете другото име на кирилица")
      */
-    private $othername;
+    private $otherName;
     /**
+     * @ORM\Column(name = "personalNumber", type="string", length=10)
      * @Assert\NotBlank(message = "Моля, въведете ЕГН")
      * @Assert\Regex(pattern="/\d/",
      *     match=true, message = "Моля, въведете ЕГН от цифри")
@@ -75,11 +101,11 @@ class Profile {
      *      exactMessage = "ЕГН се състои от  10  цифри")
      * @AcmeAssert\egn
      */
-    private $personalnumber;
+    private $personalNumber;
     /**
-     *
+     * @ORM\Column(name = "personalNumberType", type="integer")
      */
-    private $personalnumbertype;
+    private $personalNumberType;
     
     
 
@@ -95,77 +121,77 @@ class Profile {
     
     
     public function getFirstName() {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     public function setFirstName($firstName) {
-        $this->firstname = $firstName;
+        $this->firstName = $firstName;
         return $this;
     }
 
     public function getMiddleName() {
-        return $this->middlename;
+        return $this->middleName;
     }
 
     public function setMiddleName($middleName = null) {
-        $this->middlename = $middleName;
+        $this->middlenName = $middleName;
         return $this;
     }
 
     public function getLastName() {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     public function setLastName($lastName) {
-        $this->lastname = $lastName;
+        $this->lastName = $lastName;
         return $this;
     }
 
     public function getOtherName() {
-        return $this->othername;
+        return $this->otherName;
     }
 
     public function setOtherName($otherName) {
-        $this->othername = $otherName;
+        $this->otherName = $otherName;
         return $this;
     }
 
     public function getPersonalNumber() {
-        return $this->personalnumber;
+        return $this->personalNumber;
     }
 
     public function setPersonalNumber($personalNumber = null) {
-        $this->personalnumber = $personalNumber;
+        $this->personalNumber = $personalNumber;
         return $this;
     }
 
     public function getPersonalNumberType() {
-        return $this->personalnumbertype;
+        return $this->personalNumberType;
     }
 
     public function setPersonalNumberType(
     //PersonalNumberType 
     $personalNumberType) {
-        $this->personalnumbertype = $personalNumberType;
+        $this->personalNumberType = $personalNumberType;
         return $this;
     }
     
 
     public function getBirthDate() {
-        return $this->birthdate;
+        return $this->birthDate;
     }
 
     public function setBirthDate(DateTime $birthDate = null) {
-        $this->birthdate = $birthDate;
+        $this->birthDate = $birthDate;
         return $this;
     }
 
     public function getGender() {
-        return $this->genderid;
+        return $this->genderId;
     }
 
     public function setGender(Gender $gender = null) {
-        $this->genderid = $gender;
+        $this->genderId = $gender;
         return $this;
     }
 
@@ -188,11 +214,11 @@ class Profile {
     }
 
     public function getSecondPhone() {
-        return $this->secondphone;
+        return $this->secondPhone;
     }
 
     public function setSecondPhone($secondPhone = null) {
-        $this->secondphone = $secondPhone;
+        $this->secondPhone = $secondPhone;
         return $this;
     }
 
@@ -206,20 +232,20 @@ class Profile {
     }
 
     public function getSecondGsm() {
-        return $this->secondgsm;
+        return $this->secondGsm;
     }
 
     public function setSecondGsm($secondGsm = null) {
-        $this->secondgsm = $secondGsm;
+        $this->secondGsm = $secondGsm;
         return $this;
     }
 
     public function getSecondEmail() {
-        return $this->secondemail;
+        return $this->secondEmail;
     }
 
     public function setSecondEmail($secondEmail = null) {
-        $this->secondemail = $secondEmail;
+        $this->secondEmail = $secondEmail;
         return $this;
     }
 
@@ -227,11 +253,11 @@ class Profile {
      * @return \Ucict\Bundle\StudentBundle\Entity\Address
      */
     public function getContactAddress() {
-        return $this->contactaddressid;
+        return $this->contactAddressId;
     }
 
     public function setContactAddress(Address $contactAddress = null) {
-        $this->contactaddressid = $contactAddress;
+        $this->contactAddressId = $contactAddress;
         return $this;
     }
 
@@ -243,11 +269,11 @@ class Profile {
     // }
 
     public function getGraduateYear() {
-        return $this->graduateyear;
+        return $this->graduateYear;
     }
 
     public function setGraduateYear($graduateYear) {
-        $this->graduateyear = $graduateYear;
+        $this->graduateYear = $graduateYear;
         return $this;
     }
 

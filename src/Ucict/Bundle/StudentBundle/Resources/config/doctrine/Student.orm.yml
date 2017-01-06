@@ -13,26 +13,26 @@ Ucict\Bundle\StudentBundle\Entity\Student:
     #             joinColumn:
     #                 name: profile_id
     #                 referencedColumnName: id
-        user_id:
+        userId:
             type: integer
-        profile_id:
+        profileId:
             type: integer
-        personal_number_type:
+        personalNumberType:
             type: integer
-        first_name:
+        firstName:
             type: string
             length: 255
-        middle_name:
+        middleName:
             type: string
             length: 255
-        last_name:
+        lastName:
             type: string
             length: 255
-        other_name:
+        otherName:
             type: string
             length: 255	
             nullable: true	
-        personal_number:
+        personalNumber:
             type: string
             length: 10
     # oneToOne:

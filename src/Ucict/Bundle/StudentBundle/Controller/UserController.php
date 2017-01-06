@@ -62,7 +62,8 @@ public function registerAction(Request $request){
 	
 	$user->setEmail($email);
 	$user->setPassword($encodedPassword);
-	
+
+	$em = $this->getDoctrine()->getManager();
 	$em->persist($user);
 	$em->flush();
 	
@@ -87,13 +88,12 @@ public function registerAction(Request $request){
         ->setBody(
             $this->renderView(
                 'User/index.html.twig',
-                array('name' => $name, 'email'=> $email)
+                array('name' => $name, 'userid'=>$userid)
             ),
             'text/html'
         );
     $this->get('mailer')->send($message);
-    $session->set('email', $email);
-	
+   
 	$session->getFlashBag()->add('notice', 'Вие се регистрирахте успешно в системата');
  }
  return $this->render('User/register.html.twig', array('form'=>$form->createView()));
@@ -146,12 +146,10 @@ public function registerAction(Request $request){
 				->getForm();
 	$form->handleRequest($request);
 	if($form->isSubmitted() && $form->isValid()){
-	$session = $request->getSession();
 	
-	//var_dump($username);
 	$em = $this->getDoctrine()->getManager();
 	$user  = $this->getUser();
-//$em->getRepository('AppBundle:User')->findOneByUsername($username);
+
 	$currentPassword = $user->getPassword();
 	$oldPassword = $form->get('oldpassword')->getData();
 	$newpassword =  $form->get('newpassword')->getData();
@@ -189,10 +187,13 @@ public function registerAction(Request $request){
  * @Route("/confirm_registration", name = "confirm_registration")
  */
 public function confirm_registrationAction(Request $request){
-$email = $request->query->get('email');
+	
+$routeName = $request->getUri();
+$route_arr = explode("=", $routeName);
+$userid = $route_arr[1];
 
 
-$user   = $this->getDoctrine()->getRepository('StudentBundle:User')->findBy(array('email'=>$email));
+$user   = $this->getDoctrine()->getRepository('StudentBundle:User')->findOneById($userid);
 $user->setActivated(1);
 $em = $this->getDoctrine()->getManager();
 $em->persist($user);

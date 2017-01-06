@@ -25,21 +25,21 @@ protected $password;
  * @Assert\NotBlank(message = "Моля, въведете име")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете името на кирилица")
  */
-protected $firstname;
+protected $first_name;
 /**
  * @Assert\NotBlank(message = "Моля, въведете презиме")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете презимето на кирилица")
  */
-protected $middlename;
+protected $middle_name;
 /**
  * @Assert\NotBlank(message = "Моля, въведете фамилия")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете фамилията на кирилица")
  */
-protected $lastname;
+protected $last_name;
 /**
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$i", message = "Моля, въведете другото име на кирилица")
  */
-protected $othername;
+protected $other_name;
 /**
  * @Assert\NotBlank(message = "Моля, въведете ЕГН")
  * @Assert\Regex(pattern="/\d/",
@@ -49,7 +49,7 @@ protected $othername;
  *      exactMessage = "ЕГН се състои от  10  цифри")
  * @AcmeAssert\egn
  */
-protected $personalnumber;
+protected $personal_number;
 
 /**
  * @CaptchaAssert\ValidCaptcha(
@@ -89,51 +89,51 @@ return $this->password;
 
 public function setFirstName($firstname){
 
-$this->firstname = $firstname;
+$this->first_name = $firstname;
 
 }
 
 public function getFirstName(){
-return $this->firstname;
+return $this->first_name;
 }
 
 public function setMiddleName($middlename){
 
-$this->middlename = $middlename;
+$this->middle_name = $middlename;
 
 }
 
 public function getMiddleName(){
-return $this->middlename;
+return $this->middle_name;
 }
 
 public function setLastName($lastname){
 
-$this->lastname = $lastname;
+$this->last_name = $lastname;
 
 }
 
 public function getLastName(){
-return $this->lastname;
+return $this->last_name;
 }
 
 public function setOtherName($othername){
 
-$this->othername = $othername;
+$this->other_name = $othername;
 
 }
 
 public function getOtherName(){
-return $this->othername;
+return $this->other_name;
 }
 
 public function setPersonalNumber($personalnumber){
 
-$this->personalnumber = $personalnumber;
+$this->personal_number = $personalnumber;
 
 }
 
 public function getPersonalNumber(){
-return $this->personalnumber;
+return $this->personal_number;
 }
 }
