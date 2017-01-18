@@ -57,7 +57,7 @@ class AddRegionFieldSubscriber implements EventSubscriberInterface
         $accessor = PropertyAccess::createPropertyAccessor();
        
         $city    = $accessor->getValue($data, $this->propertyPathToCity);
-        var_dump("city=".$city);
+       // var_dump("city=".$city);
         //$city = $this->getDoctrine()->getRepository('StudentBundle:City')->findOneById($city);
         $region = new Region();
         $c = new City();

@@ -46,7 +46,7 @@ public function setRegion($region)
     return $this;
 }
 public function __toString() {
-    return $this->name;
+    return (string) $this->name;
 }
 public function __get($id) {
     return $this->id;
@@ -78,7 +78,7 @@ public function __get($id) {
 		return $this;
 	}
 	public function getCity(){
-	return $this->name;
+	return $this->id;
 	}
 
 	public function setCity($city){

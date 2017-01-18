@@ -12,6 +12,7 @@ use Ucict\Bundle\StudentBundle\Form\AddressType;
 use Ucict\Bundle\StudentBundle\Entity\User;
 use Ucict\Bundle\StudentBundle\Entity\Address;
 use Ucict\Bundle\StudentBundle\Entity\Student;
+use Ucict\Bundle\StudentBundle\Entity\City;
 use Ucict\Bundle\StudentBundle\Entity\Profile;
 use Ucict\Bundle\StudentBundle\Form\Model\ProfileModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -276,16 +277,14 @@ $session->set('userid', $user_id);
 
 	$street_address   = $f->get('streetAddress')->getData();
 	$post_code   = $f->get('zip')->getData();
-	
-	$city_id    = $f->get('city')->getData();
-	//var_dump('city_id='.$city_id);
-	$city = $city_id->__get($city_id);
-	//var_dump("city=".$city);
+	$city = new City();
+	$city   = $f->get('city')->getData();
+	$city_id = $city->getId();
 	
 
 	$address->setStreetAddress($street_address);
 	$address->setZip($post_code);
-	$address->setCityId($city);
+	$address->setCityId($city_id);
   
 	$em->persist($address);
 	$em->flush();
@@ -295,7 +294,7 @@ $session->set('userid', $user_id);
 	
 	
 	
-	 $phone          = $form->get('phone')->getData();
+	$phone          = $form->get('phone')->getData();
 	$secondphone    = $form->get('secondphone')->getData();
 	$gsm            = $form->get('gsm')->getData();
 	$secondgsm      = $form->get('secondgsm')->getData();
