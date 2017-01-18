@@ -76,10 +76,16 @@
 	color:red;
 	}
 	 select{
-		width: 90px;
+		width: 200px;
 
 		
 	}
+	.borderless td {
+     border: none !important;
+     /*margin-left: -100px !important;*/
+     padding-right: 20px !important;
+
+}
 	</style>
     </head>
     <body>
@@ -92,7 +98,29 @@
 
 		{% endblock %}
         {% block javascripts %}
-
+		<script>
+$(".region_selector").change(function(){
+	$(".region_selector").closest("form").submit();
+    var data = {
+        region_id: $(this).val()
+    };
+ 
+    $.ajax({
+        type: 'post',
+        url: '{{ path("cities") }}',
+        data: data,
+        success: function(data) {
+            var $city_selector = $('.city_selector');
+ 
+            $city_selector.html('<option>Изберете</option>');
+ 
+            for (var i=0, total = data.length; i < total; i++) {
+                $city_selector.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+            }
+        }
+    });
+});
+		</script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		{% endblock %}
     </body>

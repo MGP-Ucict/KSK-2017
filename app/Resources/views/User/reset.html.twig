@@ -2,6 +2,8 @@
 {% form_theme form 'form/fields.html.twig' %}
 
 {% block content %}
+<h6>{{app.session.get('stud_name')}}</h6>
+
 <h1>Смяна на паролата</h1>
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{form_end(form)}}

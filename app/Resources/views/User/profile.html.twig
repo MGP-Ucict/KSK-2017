@@ -1,9 +1,52 @@
 {% extends 'base.html.twig' %}
 {% form_theme form 'form/fields.html.twig' %}
-{% block content %}
-<h1>Профил на кандидат-студент</h1>
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{% form_theme f 'form/fields.html.twig' %}
 
-{{form_end(form)}}
+{% block content %}
+<h6>{{app.session.get('studname')}}</h6>
+<h1>Профил на кандидат-студент</h1>
+<h3>Лични данни</h3>
+<hr/>
+<div>
+<table class = "table borderless" style = "text-align: left; "> 
+<tr><td class = "col-sm-1" style = "text-align: right;"><b>Име</b></td><td class = "col-sm-3" style = "text-align: left;">{{student.getFirstname()}}</td></tr>
+<tr><td style = "text-align: right;"><b>Презиме</b></td><td style = "text-align: left;">{{student.getMiddlename()}}</td></tr>
+<tr><td style = "text-align: right;"><b>Фамилия</b></td><td style = "text-align: left;">{{student.getLastname()}}</td></tr>
+<tr><td style = "text-align: right;"><b>Друго име</b></td><td style = "text-align: left;">{{student.getOthername()}}</td></tr>
+<tr><td style = "text-align: right;"><b>ЕГН</b></td><td style = "text-align: left;">{{student.getPersonalnumber()}}</td></tr>
+<tr><td style = "text-align: right;"><b>Дата на раждане</b></td><td style = "text-align: left;">{{birthdate}}
+</td></tr>
+<tr><td style = "text-align: right;"><b>Пол</b></td><td style = "text-align: left;">{{gender}}</td></tr>
+
+
+
+</table>
+</div>
+<div style = "clear:both;">
+</div>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_row(form.graduateyear) }}
+
+<h3>Информация за контакт</h3>
+
+
+   
+        {#% for address in form.addresses %#}
+            {{ form_row(f.region) }}
+            <br/>
+             {{ form_row(f.city) }}
+
+             <br/>
+              {{ form_row(f.zip) }}
+              <br/>
+              {{ form_row(f.streetAddress) }}
+
+             
+        {#% endfor %#}
+    
+
+
+{{form_rest(form)}}
 
 {% endblock %}
