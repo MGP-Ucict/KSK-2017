@@ -1,0 +1,20 @@
+Ucict\Bundle\StudentBundle\Entity\Region:
+    type: entity
+    oneToMany:
+        cities:
+            targetEntity: City
+            mappedBy: region
+
+
+    table: Nomenclature_Region
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name: 
+            type: string
+            length: 100
+        shortName: 
+            type: string
+            length: 20

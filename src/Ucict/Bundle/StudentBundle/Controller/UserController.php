@@ -3,17 +3,22 @@
 namespace Ucict\Bundle\StudentBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use DateTime;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Ucict\Bundle\StudentBundle\Form\RegisterType;
 use Ucict\Bundle\StudentBundle\Form\ProfileType;
+use Ucict\Bundle\StudentBundle\Form\AddressType;
 use Ucict\Bundle\StudentBundle\Entity\User;
+use Ucict\Bundle\StudentBundle\Entity\Address;
 use Ucict\Bundle\StudentBundle\Entity\Student;
 use Ucict\Bundle\StudentBundle\Entity\Profile;
+use Ucict\Bundle\StudentBundle\Form\Model\ProfileModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -69,13 +74,40 @@ public function registerAction(Request $request){
 	
 	$userid = $user->getId();
 	
+	$profile = new Profile();
+
+	$egnYear = intval(substr($personalnumber, 0, 2));
+			$egnMonth = intval(substr($personalnumber, 2, 2));
+			$egnDay = intval(substr($personalnumber, 4, 2));
+			$egnGender = intval(substr($personalnumber, 8, 1)) % 2;
+
+			if ($egnMonth >= 1 && $egnMonth <= 12) {
+				$egnYear += 1900;
+			} else if ($egnMonth >= 41 && $egnMonth <= 52) {
+				$egnYear += 2000;
+				$egnMonth -= 40;
+			}
+
+			
+				$birthdate = DateTime::createFromFormat('Y-m-d', 
+										sprintf('%04d-%02d-%02d', $egnYear, $egnMonth, $egnDay));
+			
+
+			$gender = ($egnGender == 0) ? 1 : 2;
+
+
+			$profile->setGenderId($gender);
+			$profile->setBirthDate($birthdate);
+			$em->persist($profile);
+	$em->flush();
+	$profile_id = $profile->getId();
 	$student->setFirstName($firstname);
 	$student->setMiddleName($middlename);
 	$student->setLastName($lastname);
 	$student->setOtherName($othername);
 	$student->setPersonalNumber($personalnumber);
 	$student->setPersonalNumberType(0);
-	$student->setProfileId(0);
+	$student->setProfileId($profile_id);
 	$student->setUserId($userid);
 	$em->persist($student);
 	$em->flush();
@@ -83,7 +115,7 @@ public function registerAction(Request $request){
 	$name = $firstname . " ". $lastname;
 	$message = \Swift_Message::newInstance()
         ->setSubject('КСК 2017  Регистрация на кандидат-студент в СУ "Св. Климент Охридски" ')
-        ->setFrom('mpenelova@ucc.uni-sofia.bg')
+        ->setFrom('ksksupport@uni-sofia.bg')
         ->setTo($email)
         ->setBody(
             $this->renderView(
@@ -100,9 +132,11 @@ public function registerAction(Request $request){
  
 }
  public function loginAction(Request $request)
-{
+{	
+
     $authenticationUtils = $this->get('security.authentication_utils');
 
+    
     // get the login error if there is one
     $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -119,10 +153,10 @@ public function registerAction(Request $request){
 	 * @Route( "/reset", name= "reset")
 	 */
 	 public function resetAction( Request $request){
-	 /*if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+	 if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
 	 	return $this->redirect($this->generateUrl('login'));
     }
-*/
+
 	 $reset = new Reset();
 	 $form = $this->createFormBuilder($reset)
 				->add('oldpassword', PasswordType::class, array(
@@ -209,79 +243,111 @@ return $this->render('User/confirm_registration.html.twig', array( ));
  */
  public function profileAction(Request $request){
 
- $profile  = new Profile();
+  
+ $session = new Session();
 
- $form 	   = $this->createForm( ProfileType::class, $profile );
-$form->handleRequest( $request );
- if( $form->isSubmitted()  && $form->isValid()){
-	$em             = $this->getDoctrine()->getManager();
-	$firstname      = $form->get('firstname')->getData();
-	$middlename     = $form->get('middlename')->getData();
-	$lastname       = $form->get('lastname')->getData();
-	$othername      = $form->get('othername')->getData();
-	$personalnumber = $form->get('personalnumber')->getData();
-	$birthdate      = $form->get('birthdate')->getData();
-	$graduateyear   = $form->get('graduateyear')->getData();
+ $user_id = $this->getUser()->getId();
+$student = $this->getDoctrine()->getRepository('StudentBundle:Student')->findOneByUserId($user_id);
+$profile_id = $student->getProfileId();
+$profile = $this->getDoctrine()->getRepository('StudentBundle:Profile')->findOneById($profile_id);
+$address_id = $profile->getAddress();
+$address = null;
+if(!$address_id)
+	$address = new Address();
+else
+	$address = $this->getDoctrine()->getRepository('StudentBundle:Address')->findOneById($address_id);
+//var_dump($profile->getAddresses());
+// var_dump($address);
+// $profile->addAddress($address);//->add($address);
+$birthdate = $profile->getBirthDate()->format('d.m.Y');
+$gender = ($profile->getGenderId() % 2 == 0) ? "жена" : "мъж";
 
-	//$user_object    = $this->getDoctrine()->getRepository('StudentBundle:User')->findOnByEmail($mail);
-	//if( $user_object ){
-		//throw Exception
-//	}
+$session->set('userid', $user_id);
+ $name = $student->getFirstName()." ".$student->getLastName();
+ $session->set('studname', $name);
+
+  $form 	   = $this->createForm(ProfileType::class, $profile );
+  $f = $this->createForm(AddressType::class, $address);
+
+ $form->handleRequest( $request );
+ $f->handleRequest( $request );
+ if( $form->isSubmitted() && $form->isValid()){
+	 $em             = $this->getDoctrine()->getManager();
+
+	$street_address   = $f->get('streetAddress')->getData();
+	$post_code   = $f->get('zip')->getData();
 	
-	//$profile         = new Profile();
+	$city_id    = $f->get('city')->getData();
+	//var_dump('city_id='.$city_id);
+	$city = $city_id->__get($city_id);
+	//var_dump("city=".$city);
 	
-	$student         = new Student();
-	
-	
-	
-	
-	$student->setFirstName($firstname);
-	$student->setMiddleName($middlename);
-	$student->setLastName($lastname);
-	$student->setOtherName($othername);
-	$student->setPersonalNumber($personalnumber);
-	$student->setPersonalNumberType(0);
-	$student->setProfileId(0);
-	//$student->setUserId($userid);
-	$em->persist($student);
+
+	$address->setStreetAddress($street_address);
+	$address->setZip($post_code);
+	$address->setCityId($city);
+  
+	$em->persist($address);
 	$em->flush();
+
+	$graduateyear   = $form->get('graduateyear')->getData();
 	
 	
-	$this->get('session')->getFlashBag('notice', 'Вие се регистрирахте успешно в системата');
+	
+	
+	 $phone          = $form->get('phone')->getData();
+	$secondphone    = $form->get('secondphone')->getData();
+	$gsm            = $form->get('gsm')->getData();
+	$secondgsm      = $form->get('secondgsm')->getData();
+	 
+	$profile->setPhone($phone);
+	$profile->setAddress($address_id);
+	$profile->setSecondPhone($secondphone);
+	$profile->setGsm($gsm);
+	$profile->setSecondGsm($secondgsm);
+	 $profile->setGraduateYear($graduateyear);
+	
+	
+	 $em->persist($profile);
+	 $em->flush();
+
+	
  }
-//  else
-// { die('not valid'); }
- return $this->render('User/profile.html.twig', array('form'=>$form->createView()));
+
+return $this->render('User/profile.html.twig', array('form' => $form->createView(),
+ 													  'student' => $student,
+ 													  'birthdate' => $birthdate,
+ 													  'gender' =>$gender,
+ 													  'f' =>$f->createView(),
+ 												));
  
  }
-//  public function indexAction($name = "")
-// {
-//     $message = \Swift_Message::newInstance()
-//         ->setSubject('Hello Email')
-//         ->setFrom('mpenelova@ucc.uni-sofia.bg')
-//         ->setTo('mpenelova@ucc.uni-sofia.bg')
-//         ->setBody(
-//             $this->renderView(
-//                 // app/Resources/views/Emails/registration.html.twig
-//                 'User/index.html.twig',
-//                 array('name' => $name)
-//             ),
-//             'text/html'
-//         )
-//         /*
-//          * If you also want to include a plaintext version of the message
-//         ->addPart(
-//             $this->renderView(
-//                 'Emails/registration.txt.twig',
-//                 array('name' => $name)
-//             ),
-//             'text/plain'
-//         )
-//         */
-//     ;
-//     $this->get('mailer')->send($message);
 
-//     return $this->render('User/index.html.twig');
-// }
+ 
+ /**
+ * @Route("/regions", name="regions")
+ */
+public function regionsAction(Request $request)
+{
+    
+ 
+    $em = $this->getDoctrine()->getManager();
+    $provinces = $em->getRepository('StudentBundle:Region')->findAll();
+ 
+    return new JsonResponse($provinces);
+}
+ 
+/**
+ * @Route("/cities", name="cities")
+ */
+public function citiesAction(Request $request)
+{
+    $region_id = $request->query->get('region');
+ 
+    $em = $this->getDoctrine()->getManager();
+    $cities = $em->getRepository('StudentBundle:City')->findByRegionId($region_id);
+ 
+    return new JsonResponse($cities);
+}
 }
 

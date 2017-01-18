@@ -25,21 +25,21 @@ protected $password;
  * @Assert\NotBlank(message = "Моля, въведете име")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете името на кирилица")
  */
-protected $first_name;
+protected $firstname;
 /**
  * @Assert\NotBlank(message = "Моля, въведете презиме")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете презимето на кирилица")
  */
-protected $middle_name;
+protected $middlename;
 /**
  * @Assert\NotBlank(message = "Моля, въведете фамилия")
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$/i", message = "Моля, въведете фамилията на кирилица")
  */
-protected $last_name;
+protected $lastname;
 /**
  * @Assert\Regex(pattern     = "/[А-Яа-я]+$i", message = "Моля, въведете другото име на кирилица")
  */
-protected $other_name;
+protected $othername;
 /**
  * @Assert\NotBlank(message = "Моля, въведете ЕГН")
  * @Assert\Regex(pattern="/\d/",
@@ -49,7 +49,7 @@ protected $other_name;
  *      exactMessage = "ЕГН се състои от  10  цифри")
  * @AcmeAssert\egn
  */
-protected $personal_number;
+protected $personalnumber;
 
 /**
  * @CaptchaAssert\ValidCaptcha(
@@ -87,53 +87,53 @@ public function getPassword(){
 return $this->password;
 }
 
-public function setFirstName($firstname){
+public function setFirstname($firstname){
 
-$this->first_name = $firstname;
-
-}
-
-public function getFirstName(){
-return $this->first_name;
-}
-
-public function setMiddleName($middlename){
-
-$this->middle_name = $middlename;
+$this->firstname = $firstname;
 
 }
 
-public function getMiddleName(){
-return $this->middle_name;
+public function getFirstname(){
+return $this->firstname;
 }
 
-public function setLastName($lastname){
+public function setMiddlename($middlename){
 
-$this->last_name = $lastname;
-
-}
-
-public function getLastName(){
-return $this->last_name;
-}
-
-public function setOtherName($othername){
-
-$this->other_name = $othername;
+$this->middlename = $middlename;
 
 }
 
-public function getOtherName(){
-return $this->other_name;
+public function getMiddlename(){
+return $this->middlename;
 }
 
-public function setPersonalNumber($personalnumber){
+public function setLastname($lastname){
 
-$this->personal_number = $personalnumber;
+$this->lastname = $lastname;
 
 }
 
-public function getPersonalNumber(){
-return $this->personal_number;
+public function getLastname(){
+return $this->lastname;
+}
+
+public function setOthername($othername){
+
+$this->othername = $othername;
+
+}
+
+public function getOthername(){
+return $this->othername;
+}
+
+public function setPersonalnumber($personalnumber){
+
+$this->personalnumber = $personalnumber;
+
+}
+
+public function getPersonalnumber(){
+return $this->personalnumber;
 }
 }

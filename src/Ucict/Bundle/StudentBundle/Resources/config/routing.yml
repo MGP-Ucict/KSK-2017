@@ -19,6 +19,13 @@ confirm_registration:
 index:
     path: /index
     defaults: { _controller: StudentBundle:User:index}
+regions:
+    path: /regions
+    defaults: { _controller: StudentBundle:User:regions}
+cities:
+    path: /cities
+    defaults: { _controller: StudentBundle:User:cities}
+
 
 
 

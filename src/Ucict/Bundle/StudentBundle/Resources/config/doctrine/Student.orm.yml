@@ -1,22 +1,21 @@
 Ucict\Bundle\StudentBundle\Entity\Student:
     type: entity
+    oneToOne:
+    profile:
+      targetEntity: Profile
+      joinColumn:
+        name: profile_id
+        referencedColumnName: id
     table: student
     id:
         id:
             type: integer
             generator: { strategy: AUTO }
     fields:
-    # oneToOne:
-    #     profile:
-    #             targetEntity: Profile
-    #             inversedBy: student
-    #             joinColumn:
-    #                 name: profile_id
-    #                 referencedColumnName: id
+   
         userId:
             type: integer
-        profileId:
-            type: integer
+        
         personalNumberType:
             type: integer
         firstName:
@@ -35,7 +34,6 @@ Ucict\Bundle\StudentBundle\Entity\Student:
         personalNumber:
             type: string
             length: 10
-    # oneToOne:
-    #   profile:
-    #     targetEntity: Profile
-    #     mappedBy: student       
+        profileId: 
+            type: integer
+    

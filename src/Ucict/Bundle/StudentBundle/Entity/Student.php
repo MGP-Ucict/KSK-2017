@@ -43,11 +43,11 @@ class Student {
      */
 	private $personalNumberType;
 	
-	
 
 	/**
-     * @ORM\OneToOne(targetEntity="Profile", inversedBy="student")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     * 
+     * @OneToOne(targetEntity="Profile")
+     * @JoinColumn(name="profile_id", referencedColumnName="id")
      */
 	private $profileId;
 

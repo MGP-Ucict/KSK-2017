@@ -1,36 +1,49 @@
 Ucict\Bundle\StudentBundle\Entity\Profile:
     type: entity
+    Profile:
+        oneToOne:
+            addresses:
+                targetEntity: Address
+                inversedBy: profile
+                joinColumn:
+                    name: contact_address_id
+                    referencedColumnName: id
+
+
     table: student_profile
     id:
         id:
             type: integer
             generator: { strategy: AUTO }
     fields:
-        birthDate: 
+        graduateYear: 
+            type: integer
+            nullable: true
+        birthDate:
             type: date 
+        genderId: 
+            type: integer
         phone:
             length: 32
             nullable: true
             type: string
+            nullable: true
         secondPhone:
             length: 32
             nullable: true
             type: string
+            nullable: true
         gsm:
             length: 32
             type: string
+            nullable: true
         secondGsm:
             length: 32
             type: string
             nullable: true
-        graduateYear:
-            type: integer
-             
-        genderId:
-            type: integer
-
         contactAddressId: 
             type: integer
+            nullable: true
         
         # oneToOne:
         #   profile:

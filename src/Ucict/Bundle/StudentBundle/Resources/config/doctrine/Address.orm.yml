@@ -1,0 +1,25 @@
+Ucict\Bundle\StudentBundle\Entity\Address:
+    type: entity
+    Address:
+        oneToOne:
+            addresses:
+                targetEntity: Profile
+                mappedBy: profile
+
+
+    table: Address
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        streetAddress: 
+            type: string
+            length: 512
+        zip: 
+            type: string
+            length: 20
+            nullable: true
+        cityId:
+            type: integer
+            nullable: true
