@@ -8,6 +8,10 @@ Ucict\Bundle\StudentBundle\Entity\City:
                 name: region_id
                 referencedColumnName: id
 
+    oneToMany:
+        addresses:
+            targetEntity: Address
+            mappedBy: city
 
     table: Nomenclature_CityEkatte
     id:

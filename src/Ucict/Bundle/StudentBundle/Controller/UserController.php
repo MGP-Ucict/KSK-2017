@@ -19,7 +19,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\PropertyAccess\PropertyPath;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -242,7 +244,7 @@ return $this->render('User/confirm_registration.html.twig', array( ));
 /**
  * @Route("/profile", name = "profile")
  */
- public function profileAction(Request $request){
+ public function profileAction(Request $request, FormEvent $event=null){
 
   
  $session = new Session();
@@ -272,14 +274,21 @@ $session->set('userid', $user_id);
 
  $form->handleRequest( $request );
  $f->handleRequest( $request );
- if( $form->isSubmitted() && $form->isValid()){
+ if( $f->isSubmitted() && $form->isValid()){
 	 $em             = $this->getDoctrine()->getManager();
 
 	$street_address   = $f->get('streetAddress')->getData();
 	$post_code   = $f->get('zip')->getData();
-	$city = new City();
-	$city   = $f->get('city')->getData();
-	$city_id = $city->getId();
+	//$city = new /City();
+	//$accessor = PropertyAccess::createPropertyAccessor();
+     $city   = $f->get('city')->getData();//->getId();
+     //$data = $event->getData();
+ //     $propertyPathToCity = new PropertyPath("city");
+ //    $city_id    = $accessor->getValue($city,  $propertyPathToCity);
+	// //
+     if($city){
+     $city_id = $city->getId();
+	  var_dump($city->getId());
 	
 
 	$address->setStreetAddress($street_address);
@@ -309,7 +318,7 @@ $session->set('userid', $user_id);
 	
 	 $em->persist($profile);
 	 $em->flush();
-
+}
 	
  }
 

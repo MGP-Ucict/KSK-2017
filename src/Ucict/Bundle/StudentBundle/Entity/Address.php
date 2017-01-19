@@ -2,7 +2,7 @@
 
 namespace Ucict\Bundle\StudentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
-//use Ucict\Bundle\NomenclatureBundle\Entity\City;
+use Ucict\Bundle\NomenclatureBundle\Entity\City;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Address")
@@ -13,15 +13,23 @@ class Address {
 	 * @var integer
 	 */
 	private $id;
+
 	private $cityId;
 	private $zip;
 	private $streetAddress;
 	private $region;
 	private $address;
 
+	/**
+	 * @ORM\ManyToOne( targetEntity = "City", inversedBy = "addrresses")
+	 * @ORM\JoinColumn (name = "contact_address_id", referencedColumnName = "id")
+	 *
+	 */
+	private $city;
+
 	 /*
      * 
-     * @OneToOne(targetEntity="Address", mappedBy="addresses")
+     * @ORM\OneToOne(targetEntity="Address", mappedBy="addresses")
      */
     private $profile;
 	/**

@@ -5,7 +5,14 @@ Ucict\Bundle\StudentBundle\Entity\Address:
             addresses:
                 targetEntity: Profile
                 mappedBy: profile
-
+    
+        manyToOne:
+            city:
+                targetEntity: City
+                inversedBy: addresses
+                joinColumn:
+                    name: contact_address_id
+                    referencedColumnName: id
 
     table: Address
     id:

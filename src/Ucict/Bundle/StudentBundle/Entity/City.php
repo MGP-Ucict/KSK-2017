@@ -4,7 +4,7 @@ namespace Ucict\Bundle\StudentBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Regex; 
-
+use Doctrine\Common\Collections\ArrayCollection;
  
  use Doctrine\ORM\Mapping as ORM;
 /**
@@ -20,6 +20,16 @@ class City{
      * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      */
     private $region;
+
+    /**
+     * @OneToMany(targetEntity = "Address", mappedBy = "city")
+     */
+    private $addresses;
+
+    public function __construct(){
+
+    	$this->addresses = new ArrayCollection();
+    }
 
 //Here generate the get and the set customized
  /**
