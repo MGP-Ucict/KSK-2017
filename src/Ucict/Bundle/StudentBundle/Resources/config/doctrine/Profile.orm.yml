@@ -1,7 +1,7 @@
 Ucict\Bundle\StudentBundle\Entity\Profile:
     type: entity
     Profile:
-        oneToOne:
+        oneToMany:
             addresses:
                 targetEntity: Address
                 inversedBy: profile

@@ -33,10 +33,11 @@ class Profile {
      private $birthDate;
      /*
      * 
-     * @OneToOne(targetEntity="Address", inversedBy="profile")
+     * @OneToMany(targetEntity="Address", inversedBy="profile")
      * @JoinColumn(name="contact_address_id", referencedColumnName="id")
      */
-    //private $addresses;
+    private $addresses;
+    
      private $contactAddressId;
 	/**
      * @ORM\Column(name = "phone", type="string", length=32)
@@ -72,7 +73,7 @@ class Profile {
    
     public function __construct()
     {
-       // $this->addresses = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -83,7 +84,7 @@ class Profile {
     }
      public function addAddress(Address $address)
     {
-        $this->addresses = $address;
+        $this->addresses[] = $address;
     }
 
     public function removeAddress(Address $address)
@@ -153,23 +154,23 @@ class Profile {
          return $this;
      }
 
-     public function getAddress() {
-         return $this->contactAddressId;
-     }
+     // public function getAddress() {
+     //     return $this->contactAddressId;
+     // }
 
-     public function setAddress($address) {
-         $this->contactAddressId = $address;
-        return $this;
-     }
+     // public function setAddress($address) {
+     //     $this->contactAddressId = $address;
+     //    return $this;
+     // }
 
-    // public function getAddresses()
-    // {
-    //     return $this->addresses;
-    // }
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
     
-    // public function setAddresses(Address $address){
-    //     $this->addresses = $address;
-    // }
+    public function setAddresses(Address $address){
+        $this->addresses = $address;
+    }
 
     // /**
     //  * @return Student
@@ -186,5 +187,12 @@ class Profile {
         $this->graduateYear = $graduateYear;
         return $this;
     }
+     public function getContactAddressId() {
+        return $this->contactAddressId;
+    }
 
+    public function setContactAddressId($id) {
+        $this->contactAddressId = $id;
+        return $this;
+    }
 }

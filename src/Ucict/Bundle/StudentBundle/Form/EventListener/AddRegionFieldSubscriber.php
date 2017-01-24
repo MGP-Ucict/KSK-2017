@@ -12,10 +12,12 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class AddRegionFieldSubscriber implements EventSubscriberInterface
 {
     private $propertyPathToCity;
+   private $region;
  
-    public function __construct($propertyPathToCity)
+    public function __construct($propertyPathToCity, $region)
     {
         $this->propertyPathToCity = $propertyPathToCity;
+        $this->region = $region;
     }
  
     public static function getSubscribedEvents()
@@ -27,11 +29,13 @@ class AddRegionFieldSubscriber implements EventSubscriberInterface
     }
  
     private function addRegionForm($form, $region = null)
-    {
+    { 
+        
         $formOptions = array(
             'class'         => 'StudentBundle:Region',
             'mapped'        => false,
             'label'         => 'Регион',
+            'data' => $this->region,//$region->getId(),
             //'empty_value'   => 'Изберете',
             'attr'          => array(
                 'class' => 'region_selector',
@@ -53,17 +57,16 @@ class AddRegionFieldSubscriber implements EventSubscriberInterface
         if (null === $data) {
             return;
         }
- 
-        $accessor = PropertyAccess::createPropertyAccessor();
+        $accessorBuilder = PropertyAccess::createPropertyAccessorBuilder();
+        $accessor = $accessorBuilder->getPropertyAccessor(); //PropertyAccess::getPropertyAccessor();
        
         $city    = $accessor->getValue($data, $this->propertyPathToCity);
-       // var_dump("city=".$city);
+        var_dump($city);
+        //var_dump("city=".$city);
         //$city = $this->getDoctrine()->getRepository('StudentBundle:City')->findOneById($city);
-        $region = new Region();
-        $c = new City();
-        $c->setId($city);
-        $region = ($city) ?  $c->getRegion() : null;//$city->getRegion();
- 
+       // var_dump($city->getRegion());
+        $region = ($city) ?  $data->getRegion():null;//$c->getRegion() : null;//$city->getRegion();
+    
         $this->addRegionForm($form, $region);
     }
  

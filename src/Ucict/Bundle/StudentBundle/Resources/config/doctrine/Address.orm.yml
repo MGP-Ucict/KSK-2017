@@ -1,7 +1,7 @@
 Ucict\Bundle\StudentBundle\Entity\Address:
     type: entity
     Address:
-        oneToOne:
+        ManyToOne:
             addresses:
                 targetEntity: Profile
                 mappedBy: profile
@@ -11,7 +11,7 @@ Ucict\Bundle\StudentBundle\Entity\Address:
                 targetEntity: City
                 inversedBy: addresses
                 joinColumn:
-                    name: contact_address_id
+                    name: city_id
                     referencedColumnName: id
 
     table: Address
@@ -23,6 +23,7 @@ Ucict\Bundle\StudentBundle\Entity\Address:
         streetAddress: 
             type: string
             length: 512
+            nullable: true;
         zip: 
             type: string
             length: 20

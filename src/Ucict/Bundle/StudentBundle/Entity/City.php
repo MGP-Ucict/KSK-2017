@@ -1,7 +1,7 @@
 <?php
 
 namespace Ucict\Bundle\StudentBundle\Entity;
-
+use Ucict\Bundle\StudentBundle\Entity\Address;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Regex; 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -94,5 +94,12 @@ public function __get($id) {
 	public function setCity($city){
 		$this->id = $city;
 		return $this;
+	}
+	public function setAddresses( $address){
+		$this->addresses = $address;
+		return $this;
+	}
+	public function getAddresses(){
+		return $this->addresses;
 	}
 }	

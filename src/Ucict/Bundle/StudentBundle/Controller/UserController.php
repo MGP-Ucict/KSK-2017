@@ -4,6 +4,7 @@ namespace Ucict\Bundle\StudentBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use DateTime;
+
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Ucict\Bundle\StudentBundle\Form\RegisterType;
@@ -13,6 +14,7 @@ use Ucict\Bundle\StudentBundle\Entity\User;
 use Ucict\Bundle\StudentBundle\Entity\Address;
 use Ucict\Bundle\StudentBundle\Entity\Student;
 use Ucict\Bundle\StudentBundle\Entity\City;
+use Ucict\Bundle\StudentBundle\Entity\Region;
 use Ucict\Bundle\StudentBundle\Entity\Profile;
 use Ucict\Bundle\StudentBundle\Form\Model\ProfileModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -244,92 +246,136 @@ return $this->render('User/confirm_registration.html.twig', array( ));
 /**
  * @Route("/profile", name = "profile")
  */
- public function profileAction(Request $request, FormEvent $event=null){
+public function profileAction(Request $request){
 
   
- $session = new Session();
-
- $user_id = $this->getUser()->getId();
+$session = new Session();
+$address_id = 0;
+$user_id = $this->getUser()->getId();
 $student = $this->getDoctrine()->getRepository('StudentBundle:Student')->findOneByUserId($user_id);
 $profile_id = $student->getProfileId();
+
+$em             = $this->getDoctrine()->getManager();
+
 $profile = $this->getDoctrine()->getRepository('StudentBundle:Profile')->findOneById($profile_id);
-$address_id = $profile->getAddress();
-$address = null;
-if(!$address_id)
+$address_id = $profile->getContactAddressId();
+
+$region = new Region();
+$city = new City();
+$city_id = null;
+$region_id= null;
+
+$address = new Address();
+if(!$address_id){
 	$address = new Address();
-else
+	
+	$em->persist($address);
+	$em->flush();
+	$address_id = $address->getId();
+	$profile->setContactAddressId($address_id);
+	
+	$em->persist($profile);
+	
+	$em->flush();
+}
+
+
+
+if($address_id){
+	
 	$address = $this->getDoctrine()->getRepository('StudentBundle:Address')->findOneById($address_id);
-//var_dump($profile->getAddresses());
-// var_dump($address);
-// $profile->addAddress($address);//->add($address);
+	$city_id =($address) ?($address->getCityId()):null;
+	if($city_id){
+	$city = $this->getDoctrine()->getRepository('StudentBundle:City')->findOneById($city_id);
+	if($city){
+	
+	$region = $city->getRegion();
+} 
+}
+}
+
 $birthdate = $profile->getBirthDate()->format('d.m.Y');
 $gender = ($profile->getGenderId() % 2 == 0) ? "жена" : "мъж";
 
 $session->set('userid', $user_id);
- $name = $student->getFirstName()." ".$student->getLastName();
- $session->set('studname', $name);
+$name = $student->getFirstName()." ".$student->getLastName();
+$session->set('studname', $name);
+$em             = $this->getDoctrine()->getManager();
+$em->persist($profile);
+ 
+$em->flush();
+$form 	   = $this->createForm(ProfileType::class, $profile );
+  
+$arr = array();
 
-  $form 	   = $this->createForm(ProfileType::class, $profile );
-  $f = $this->createForm(AddressType::class, $address);
+  
+if($city->getName() ){
+  $arr = array(
+    'action'     => $this->generateUrl('profile'),
+    'city' =>  $city,
+    'region' =>$region,
+    );
+}
+else{
+	$arr = array(
+    'action'     => $this->generateUrl('profile'),
+    );
+}
+ 
+$f = $this->createForm(AddressType::class, $address, $arr);
+   
+$form->handleRequest( $request );
+$f->handleRequest( $request );
 
- $form->handleRequest( $request );
- $f->handleRequest( $request );
- if( $f->isSubmitted() && $form->isValid()){
-	 $em             = $this->getDoctrine()->getManager();
+if( $f->isSubmitted() && $f->isValid()){
+	$em             = $this->getDoctrine()->getManager();
 
 	$street_address   = $f->get('streetAddress')->getData();
 	$post_code   = $f->get('zip')->getData();
-	//$city = new /City();
-	//$accessor = PropertyAccess::createPropertyAccessor();
-     $city   = $f->get('city')->getData();//->getId();
-     //$data = $event->getData();
- //     $propertyPathToCity = new PropertyPath("city");
- //    $city_id    = $accessor->getValue($city,  $propertyPathToCity);
-	// //
-     if($city){
-     $city_id = $city->getId();
-	  var_dump($city->getId());
 	
-
-	$address->setStreetAddress($street_address);
-	$address->setZip($post_code);
-	$address->setCityId($city_id);
-  
-	$em->persist($address);
-	$em->flush();
-
-	$graduateyear   = $form->get('graduateyear')->getData();
-	
-	
-	
-	
-	$phone          = $form->get('phone')->getData();
-	$secondphone    = $form->get('secondphone')->getData();
-	$gsm            = $form->get('gsm')->getData();
-	$secondgsm      = $form->get('secondgsm')->getData();
-	 
-	$profile->setPhone($phone);
-	$profile->setAddress($address_id);
-	$profile->setSecondPhone($secondphone);
-	$profile->setGsm($gsm);
-	$profile->setSecondGsm($secondgsm);
-	 $profile->setGraduateYear($graduateyear);
-	
-	
-	 $em->persist($profile);
-	 $em->flush();
+    $city   = $f->get('city')->getData();
+    
+    if($city){
+    	$city_id = $city->getId();
 }
 	
- }
+$address->setStreetAddress($street_address);
+$address->setZip($post_code);
+$address->setCityId($city_id);
+   
+$em->flush();
+$address_id = $address->getId();
+$graduateyear   = $form->get('graduateyear')->getData();
+
+	
+$phone          = $form->get('phone')->getData();
+$secondphone    = $form->get('secondphone')->getData();
+$gsm            = $form->get('gsm')->getData();
+$secondgsm      = $form->get('secondgsm')->getData();
+
+$profile->setPhone($phone);
+$profile->setContactAddressId($address_id);
+$profile->setSecondPhone($secondphone);
+$profile->setGsm($gsm);
+$profile->setSecondGsm($secondgsm);
+$profile->setGraduateYear($graduateyear);
+
+$em->persist($profile);
+$em->flush();
+}
+	
+ 
 
 return $this->render('User/profile.html.twig', array('form' => $form->createView(),
  													  'student' => $student,
  													  'birthdate' => $birthdate,
  													  'gender' =>$gender,
  													  'f' =>$f->createView(),
- 												));
+ 													  
+
+));
  
- }
+}
 
  
  /**
@@ -337,11 +383,11 @@ return $this->render('User/profile.html.twig', array('form' => $form->createView
  */
 public function regionsAction(Request $request)
 {
-    
- 
+ 	   
+ 	
     $em = $this->getDoctrine()->getManager();
     $provinces = $em->getRepository('StudentBundle:Region')->findAll();
- 
+ 	
     return new JsonResponse($provinces);
 }
  
@@ -349,12 +395,15 @@ public function regionsAction(Request $request)
  * @Route("/cities", name="cities")
  */
 public function citiesAction(Request $request)
-{
+{ 
+
+	
+
     $region_id = $request->query->get('region');
  
     $em = $this->getDoctrine()->getManager();
     $cities = $em->getRepository('StudentBundle:City')->findByRegionId($region_id);
- 
+ 	
     return new JsonResponse($cities);
 }
 }

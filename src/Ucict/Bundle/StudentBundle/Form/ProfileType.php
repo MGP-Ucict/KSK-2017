@@ -75,11 +75,11 @@ class ProfileType extends AbstractType
 				'required'       => false,
 				//'error_bubbling' => true,
 			))	
-			// ->add('addresses', AddressType::class, //array(
-   //          //'entry_type' => AddressType::class,
-   //          // 'by_reference' => false,
-			// 	 array("mapped"=>false)
-   //      )//)
+			 // ->add('addresses', CollectionType::class, array(
+    //         	'entry_type' => AddressType::class,
+    //         	//'by_reference' => false,
+				//  // array("mapped"=>false),
+    //     ))
 			->add('save', SubmitType::class, array(
 				'label'         =>  'Запази',
 			));

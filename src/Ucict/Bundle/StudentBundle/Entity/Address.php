@@ -2,7 +2,7 @@
 
 namespace Ucict\Bundle\StudentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
-use Ucict\Bundle\NomenclatureBundle\Entity\City;
+use Ucict\Bundle\StudentBundle\Entity\City;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Address")
@@ -13,7 +13,7 @@ class Address {
 	 * @var integer
 	 */
 	private $id;
-
+	
 	private $cityId;
 	private $zip;
 	private $streetAddress;
@@ -21,15 +21,15 @@ class Address {
 	private $address;
 
 	/**
-	 * @ORM\ManyToOne( targetEntity = "City", inversedBy = "addrresses")
-	 * @ORM\JoinColumn (name = "contact_address_id", referencedColumnName = "id")
-	 *
-	 */
+	  * @ORM\ManyToOne( targetEntity = "City", inversedBy = "addrresses")
+	  * @ORM\JoinColumn (name = "city_id", referencedColumnName = "id")
+     */
+	 
 	private $city;
 
 	 /*
      * 
-     * @ORM\OneToOne(targetEntity="Address", mappedBy="addresses")
+     * @ORM\ManyToOne(targetEntity="Profile", mappedBy="addresses",   cascade={"persist"})
      */
     private $profile;
 	/**
@@ -53,6 +53,10 @@ class Address {
 
 	public function setAddress( $address) {
 		$this->id = $address;
+		return $this;
+	}
+	public function addAddress( $address) {
+		$this->address = $address;
 		return $this;
 	}
 	public function getRegion() {
@@ -84,12 +88,12 @@ class Address {
 		return $this;
 	}
 	public function getCity() {
-		return $this->cityId;
+		return $this->city;
 	}
 
 	public function setCity( $city = null) {
-		$this->cityId = $city;
+		$this->city = $city;
 		return $this;
 	}
-
+	
 }
