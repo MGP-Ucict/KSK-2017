@@ -26,13 +26,12 @@
 </div>
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
 {{ form_row(form.graduateyear) }}
 
 <h3>Информация за контакт</h3>
 
-
-   
-        {#% for address in form.addresses %#}
+  {{form_start(f)}}
             {{ form_row(f.region) }}
             <br/>
              {{ form_row(f.city) }}
@@ -41,9 +40,11 @@
               {{ form_row(f.zip) }}
               <br/>
               {{ form_row(f.streetAddress) }}
-
-             
-        {#% endfor %#}
+  {{form_rest(f)}}
+       
+              
+ 
+       
     
 
 

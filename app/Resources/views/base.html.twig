@@ -100,9 +100,9 @@
         {% block javascripts %}
 		<script>
 $(".region_selector").change(function(){
-	$(".region_selector").closest("form").submit();
+$(".region_selector").closest("form").submit();
     var data = {
-        region_id: $(this).val()
+        region: $(this).val()
     };
  
     $.ajax({
@@ -112,13 +112,14 @@ $(".region_selector").change(function(){
         success: function(data) {
             var $city_selector = $('.city_selector');
  
-            $city_selector.html('<option>Изберете</option>');
- 
+           // $city_selector.html('<option>Изберете</option>');
+ 			$city_selector.append('<option value="">Изберете</option>');
             for (var i=0, total = data.length; i < total; i++) {
                 $city_selector.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
             }
         }
     });
+
 });
 		</script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
